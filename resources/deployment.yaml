@@ -42,7 +42,7 @@ spec:
               port: 80
               path: /api/v1/health/liveness
 
-          readinessProbe: # The readyness probe indicates whether the application AND its dependencies are healthy and ready to serve requests.
+          readinessProbe: # The readiness probe indicates whether the application AND its dependencies are healthy and ready to serve requests.
             periodSeconds: 10 # Check for my application's health every 10s.
             timeoutSeconds: 5 # I think my application will respond to the probe request in less than 5s.
             failureThreshold: 10 # Allow for some failures before marking my application as failed, it could come from one if its dependencies.

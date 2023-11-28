@@ -33,8 +33,8 @@ app.MapGet("/api/v1/health/liveness", (IOptionsSnapshot<MartinProbesAppSettings>
     }
 });
 
-// The readyness probe indicates whether the application AND its dependencies are healthy and ready to serve requests.
-app.MapGet("/api/v1/health/readyness", () => "Readyness endpoint.");
+// The readiness probe indicates whether the application AND its dependencies are healthy and ready to serve requests.
+app.MapGet("/api/v1/health/readiness", () => "Readiness endpoint.");
 
 app.Run();
 
