@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: martin-probes-build
+spec:
+  ttlSecondsAfterFinished: 120
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: main
+          image: gcr.io/kaniko-project/executor:v1.17.0
+          args:
+            - --destination=ghcr.io/martin-deploy-2/probes:latest
+            - --context=git://github.com/martin-deploy-2/probes.git#refs/heads/main
+            - --context-sub-path=application
+            - --dockerfile=Containerfile
+          volumeMounts:
+            - mountPath: /kaniko/.docker/config.json
+              name: kaniko-config
+              subPath: .dockerconfigjson
+      volumes:
+        - name: kaniko-config
+          secret:
+            secretName: martin-deploy-2-ghcr

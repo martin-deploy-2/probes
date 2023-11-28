@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: martin-probes
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: 0134c65e-426b-4ca1-a2a7-190778bdbda9
+  ports:
+  - port: 80
+    targetPort: 80
