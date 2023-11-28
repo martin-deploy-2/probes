@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Options;
 
+var INeedAVariableToSimulateTheAvailabilityOfSomeFictitiousDatabase = true;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
@@ -20,7 +22,7 @@ app.MapGet("/api/v1/health/startup", () => "Started, obviously.");
 // the application configuration at startup.
 //
 // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-7.0#options-validation
-app.MapGet("/api/v1/health/liveness", (IOptionsSnapshot<MartinProbesAppSettings> options, HttpContext context) =>
+app.MapGet("/api/v1/health/liveness", (IOptionsSnapshot<MartinProbesAppSettings> options, HttpResponse response) =>
 {
     if (options.Value.INeedAnOptionToValidate)
     {
@@ -28,13 +30,47 @@ app.MapGet("/api/v1/health/liveness", (IOptionsSnapshot<MartinProbesAppSettings>
     }
     else
     {
-        context.Response.StatusCode  = 503;
+        response.StatusCode  = 503;
         return "Dead.";
     }
 });
 
-// The readiness probe indicates whether the application AND its dependencies are healthy and ready to serve requests.
-app.MapGet("/api/v1/health/readiness", () => "Readiness endpoint.");
+// The readiness probe indicates whether the application AND its dependencies
+// are healthy and ready to serve requests. I could duplicate the same tests as
+// for liveness here, or even refactor the liveness endpoint into a function
+// and call it from this endpoint, but the liveness endpoint will be probed
+// separately anyways, so I don't see the point of checking for liveness again
+// in the readiness endpoint.
+app.MapGet("/api/v1/health/readiness", (HttpResponse response) =>
+{
+    if (INeedAVariableToSimulateTheAvailabilityOfSomeFictitiousDatabase)
+    {
+        return "Ready.";
+    }
+    else
+    {
+        response.StatusCode  = 503;
+        return "Readon't."; // Have you noticed this little play on words? Humor is a sign of intelligence, I tell you.
+    }
+
+});
+
+// An endpoint to simulate (by that I mean toggle) the availability of the
+// fictitious database.
+app.MapPost("/api/v1/health/db-availablility", () =>
+{
+    INeedAVariableToSimulateTheAvailabilityOfSomeFictitiousDatabase = !INeedAVariableToSimulateTheAvailabilityOfSomeFictitiousDatabase;
+
+    if (INeedAVariableToSimulateTheAvailabilityOfSomeFictitiousDatabase)
+    {
+        return "Now available.";
+    }
+    else
+    {
+        return "Now unavailable.";
+    }
+
+});
 
 app.Run();
 

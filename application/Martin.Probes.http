@@ -4,16 +4,30 @@
 # * BASE_URL = http://localhost:5000
 
 ###############################################################################
-# This should return "Startup endpoint.", plain-text.
+# This should return 200 "Started, obviously.", plain-text.
 
 GET {{BASE_URL}}/api/v1/health/startup
 
 ###############################################################################
-# This should return "Liveness endpoint.", plain-text.
+# This should return either:
+#
+# * 200 "Alive.", plain-text, or
+# * 503 "Dead.", plain text.
 
 GET {{BASE_URL}}/api/v1/health/liveness
 
 ###############################################################################
-# This should return "Readyness endpoint.", plain-text.
+# This should return either:
+#
+# * 200 "Ready.", plain-text, or
+# * 503 "Readon't.", plain text.
 
-GET {{BASE_URL}}/api/v1/health/readyness
+GET {{BASE_URL}}/api/v1/health/readiness
+
+###############################################################################
+# This should return either:
+#
+# * 200 "Now available.", plain-text, or
+# * 200 "Now unavailable.", plain text.
+
+POST {{BASE_URL}}/api/v1/health/db-availablility
