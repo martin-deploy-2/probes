@@ -25,5 +25,31 @@ spec:
             limits:
               cpu: 100m
               memory: 1024Mi
+
+          startupProbe: # The startup probes blocks the other probes while the application cold-boots.
+            initialDelaySeconds: 2 # I think my application will take less than 2s to startup and load all its configuration.
+            timeoutSeconds: 5 # I think my application, when started, will respond to the probe request in less than 5s.
+            httpGet:
+              scheme: HTTP
+              port: 80
+              path: /api/v1/health/startup
+
+          livenessProbe: # The liveness probe indicates whether the application itself is healthy and has correct configuration.
+            periodSeconds: 10 # Check for my application's health every 10s.
+            timeoutSeconds: 5 # I think my application will respond to the probe request in less than 5s.
+            httpGet:
+              scheme: HTTP
+              port: 80
+              path: /api/v1/health/liveness
+
+          readinessProbe: # The readyness probe indicates whether the application AND its dependencies are healthy and ready to serve requests.
+            periodSeconds: 10 # Check for my application's health every 10s.
+            timeoutSeconds: 5 # I think my application will respond to the probe request in less than 5s.
+            failureThreshold: 10 # Allow for some failures before marking my application as failed, it could come from one if its dependencies.
+            httpGet:
+              scheme: HTTP
+              port: 80
+              path: /api/v1/health/readiness
+
       imagePullSecrets:
         - name: martin-deploy-2-ghcr
