@@ -4,4 +4,5 @@ RUN dotnet publish "/tmp/builder" --configuration "Release" --no-self-contained 
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 COPY --from=builder /tmp/builder/bin/publish /opt/probes
-ENTRYPOINT ["dotnet", "/opt/probes/Martin.Probes.dll"]
+WORKDIR /opt/probes
+ENTRYPOINT ["dotnet", "./Martin.Probes.dll"]
