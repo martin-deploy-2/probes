@@ -51,5 +51,13 @@ spec:
               port: 80
               path: /api/v1/health/readiness
 
+          # When the liveness probe fails, the pod IS restarted by K8S, which
+          # apparently expects different outcomes from the same cause...
+          # However, when the readiness probe fails, the pod is NOT restarted
+          # by K8S: it's the dependency's fault. This makes the LIVENESS probe
+          # a better place to fail fast if, for instance, a DB user password is
+          # faulty, and the READINESS probe a better place to fail fast if the
+          # same DB is inaccessible over the network.
+
       imagePullSecrets:
         - name: martin-deploy-2-ghcr
