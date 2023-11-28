@@ -20,11 +20,11 @@ spec:
             - containerPort: 80
           resources:
             requests:
-              cpu: 10m
-              memory: 128Mi
+              cpu: 5m
+              memory: 32Mi
             limits:
-              cpu: 100m
-              memory: 1024Mi
+              cpu: 50m
+              memory: 256Mi
 
           startupProbe: # The startup probes blocks the other probes while the application cold-boots.
             initialDelaySeconds: 2 # I think my application will take less than 2s to startup and load all its configuration.
