@@ -1,16 +1,19 @@
-@BASE_URL = http://localhost:5000
+# Use `.vscode/settings.json#/rest-client.environmentVariables/<ENV>/<VAR>` to
+# set the variables:
+#
+# * BASE_URL = http://localhost:5000
 
-###############################################################################
+# ########################################################################### #
 # This should return "Startup endpoint.", plain-text.
 
 GET {{BASE_URL}}/api/v1/health/startup
 
-###############################################################################
+# ########################################################################### #
 # This should return "Liveness endpoint.", plain-text.
 
 GET {{BASE_URL}}/api/v1/health/liveness
 
-###############################################################################
+# ########################################################################### #
 # This should return "Readyness endpoint.", plain-text.
 
 GET {{BASE_URL}}/api/v1/health/readyness
